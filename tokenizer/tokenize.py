@@ -32,10 +32,9 @@ class Tokenizer():
             x, xs = consume(string)
             string = xs
 
-
             if current_state is Token.integer:
                 if not is_integer(x):
-                    tokens.append(temp)
+                    tokens.append((temp, Token.integer))
                     temp = ""
             
             if x is None:
@@ -45,13 +44,23 @@ class Tokenizer():
                 current_state = Token.integer
                 temp += x
 
-            if x in "+/-*":
-                current_state = Token.operator
-                tokens.append(x)
-
             if x in "()":
                 current_state = Token.parenthesis
-                tokens.append(x)
+                tokens.append((x, Token.parenthesis))
+                if x == "(" and consume(xs)[0] == "-":
+                    current_state = Token.integer
+                    temp = "-"
+                    string = consume(xs)[1]
+                    continue
 
+            if x in "+/-*":
+                current_state = Token.operator
+                tokens.append((x, Token.operator))
 
+def calc(stack):
+    res = 0
+    for token, context in stack:
+        if context is Token.integer:
+            res += int(token)
+    return res
 
