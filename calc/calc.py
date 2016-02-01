@@ -5,6 +5,7 @@ class Tree():
 
 def calc(tree):
     if isinstance(tree, Tree):
-        return calc(tree.left) + calc(tree.right)
+        if calc(tree.left) is not "-":
+            return calc(tree.left) + calc(tree.right)
+        return -1 * calc(tree.right)
     return tree
-
