@@ -2,12 +2,13 @@
 import enum
 
 class Token(enum.Enum):
-    parenthesis = 1
+    minus = 1
     space = 2
     integer = 3
     operator = 4
     parenthesis_start = 5
     parenthesis_end = 6
+    
 
 
 def consume(s):
@@ -67,8 +68,16 @@ class Tokenizer():
                     string = consume(xs)[1]
                     continue
 
-            if x in "+/-*":
+            if x in "+":
                 current_state = Token.operator
                 tokens.append((x, Token.operator))
+
+            if x in "-":
+                if is_integer(consume(xs)[0]):
+                    current_state = Token.integer
+                    temp = "-"
+                    continue
+                current_state = Token.minus
+                tokens.append((x, Token.minus))
 
 
