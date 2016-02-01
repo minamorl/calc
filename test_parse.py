@@ -29,5 +29,5 @@ def test_parse4():
     expr = "1+(2+3)+((-4)+-5)"
     tokens = Tokenizer().tokenize(expr)
 
-    assert (((((0, 1), (2, 3)), 4), -5)) == parse(None, tokens)
-    assert calc(parse(None, tokens)) == 5
+    assert ((((0, -4), 0), -5), (((0, 2), 3), (0, 1))) == parse(None, tokens)
+    assert calc(parse(None, tokens)) == -3
