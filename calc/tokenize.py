@@ -50,23 +50,10 @@ class Tokenizer():
             if x == "(":
                 current_state = Token.parenthesis_start
                 tokens.append((x, Token.parenthesis_start))
-                if consume(xs)[0] == "-":
-                    current_state = Token.integer
-                    temp = "-"
-                    string = consume(xs)[1]
-                    continue
 
             if x == ")":
                 current_state = Token.parenthesis_end
                 tokens.append((x, Token.parenthesis_end))
-
-            if x in " ":
-                current_state = Token.space
-                if x == "(" and consume(xs)[0] == "-":
-                    current_state = Token.space
-                    temp = "-"
-                    string = consume(xs)[1]
-                    continue
 
             if x is "+":
                 current_state = Token.operator
@@ -79,5 +66,3 @@ class Tokenizer():
                     continue
                 current_state = Token.minus
                 tokens.append((x, Token.minus))
-
-
