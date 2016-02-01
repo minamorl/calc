@@ -68,11 +68,11 @@ class Tokenizer():
                     string = consume(xs)[1]
                     continue
 
-            if x in "+":
+            if x is "+":
                 current_state = Token.operator
                 tokens.append((x, Token.operator))
 
-            if x in "-":
+            if x is "-":
                 if is_integer(consume(xs)[0]):
                     current_state = Token.integer
                     temp = "-"
