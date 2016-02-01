@@ -6,6 +6,8 @@ class Token(enum.Enum):
     space = 2
     integer = 3
     operator = 4
+    parenthesis_start = 5
+    parenthesis_end = 6
 
 
 def consume(s):
@@ -44,11 +46,23 @@ class Tokenizer():
                 current_state = Token.integer
                 temp += x
 
-            if x in "()":
-                current_state = Token.parenthesis
-                tokens.append((x, Token.parenthesis))
-                if x == "(" and consume(xs)[0] == "-":
+            if x == "(":
+                current_state = Token.parenthesis_start
+                tokens.append((x, Token.parenthesis_start))
+                if consume(xs)[0] == "-":
                     current_state = Token.integer
+                    temp = "-"
+                    string = consume(xs)[1]
+                    continue
+
+            if x == ")":
+                current_state = Token.parenthesis_end
+                tokens.append((x, Token.parenthesis_end))
+
+            if x in " ":
+                current_state = Token.space
+                if x == "(" and consume(xs)[0] == "-":
+                    current_state = Token.space
                     temp = "-"
                     string = consume(xs)[1]
                     continue
@@ -57,10 +71,4 @@ class Tokenizer():
                 current_state = Token.operator
                 tokens.append((x, Token.operator))
 
-def calc(stack):
-    res = 0
-    for token, context in stack:
-        if context is Token.integer:
-            res += int(token)
-    return res
 
